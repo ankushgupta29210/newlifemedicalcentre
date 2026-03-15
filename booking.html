@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment | New Life Medical Centre</title>
+    <style>
+        /* GLOBAL (Matches your main site) */
+        :root{
+            --primary:#00796B;
+            --light:#E0F2F1;
+            --accent:#FFB300;
+            --text:#333;
+            --bg:#f7f7f7;
+        }
+
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Segoe UI, Arial; }
+        body{ color:var(--text); line-height:1.6; background:var(--bg); }
+
+        /* NAVBAR */
+        header{ background:white; box-shadow:0 2px 6px rgba(0,0,0,.1); position:sticky; top:0; z-index:100; }
+        .nav{ max-width:1200px; margin:auto; display:flex; justify-content:space-between; align-items:center; padding:16px 20px; }
+        .logo{ font-size:20px; font-weight:bold; color:var(--primary); text-decoration:none; }
+        .logo span{ display:block; font-size:12px; color:var(--accent); }
+        .nav a.back-btn { background: var(--primary); color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; }
+        .nav a.back-btn:hover { background: #00564d; }
+
+        /* BOOKING CONTAINER */
+        .booking-section { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        .booking-card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,.08); }
+        .booking-card h2 { color: var(--primary); text-align: center; margin-bottom: 20px; font-size: 28px; }
+
+        /* FORM ELEMENTS */
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 8px; color: var(--text); }
+        .form-group input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px; outline: none; transition: border-color 0.3s; }
+        .form-group input:focus { border-color: var(--primary); }
+
+        /* TIME SLOTS GRID */
+        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 10px; }
+        .slot-btn { background: white; border: 2px solid var(--primary); color: var(--primary); padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; text-align: center; user-select: none; }
+        .slot-btn:hover { background: var(--light); }
+        .slot-btn.selected { background: var(--primary); color: white; }
+        .slot-btn.booked { background: #e0e0e0; border-color: #ccc; color: #888; cursor: not-allowed; text-decoration: line-through; }
+
+        /* SUBMIT BUTTON */
+        .submit-btn { width: 100%; background: var(--primary); color: white; padding: 15px; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: background 0.3s; }
+        .submit-btn:hover { background: #00564d; }
+        .submit-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+        /* SUCCESS MESSAGE */
+        .success-msg { display: none; text-align: center; background: #d4edda; color: #155724; padding: 20px; border-radius: 6px; margin-top: 20px; border: 1px solid #c3e6cb; }
+
+        footer{ background:var(--primary); color:white; text-align:center; padding:25px; margin-top:40px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="nav">
+        <a href="index.html" class="logo">
+            New Life Medical Centre
+            <span>Nurturing Your Little One</span>
+        </a>
+        <a href="index.html" class="back-btn">← Back</a>
+    </div>
+</header>
+
+<section class="booking-section">
+    <div class="booking-card">
+        <h2>Book an Appointment</h2>
+        
+        <div class="form-group">
+            <label for="patientName">Patient (Child's) Name</label>
+            <input type="text" id="patientName" placeholder="Enter name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="patientPhone">Mobile Number</label>
+            <input type="tel" id="patientPhone" placeholder="10-digit mobile number" required>
+        </div>
+
+        <div class="form-group">
+            <label for="appointmentDate">Select Date</label>
+            <input type="date" id="appointmentDate" required>
+        </div>
+
+        <div class="form-group" id="timeSlotContainer" style="display: none;">
+            <label>Select Time Slot (5:00 PM - 8:00 PM)</label>
+            <div class="slots-grid" id="slotsGrid">
+                </div>
+        </div>
+
+        <button id="submitBooking" class="submit-btn" disabled>Confirm Booking</button>
+
+        <div id="successMessage" class="success-msg">
+            <strong>Booking Confirmed!</strong><br>
+            Your appointment has been successfully scheduled. We will see you at the clinic!
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 New Life Medical Centre</p>
+</footer>
+
+<script type="module">
+    // 1. Import Firebase functions
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+    // =========================================================
+    // 2. PASTE YOUR FIREBASE CONFIG HERE:
+    // Replace the block below with the code Firebase gave you
+    // =========================================================
+    const firebaseConfig = {
+    apiKey: "AIzaSyAenGweoenGZZJKsora8XD1XsQdjzPgeHk",
+    authDomain: "newlifebooking-bda0f.firebaseapp.com",
+    projectId: "newlifebooking-bda0f",
+    storageBucket: "newlifebooking-bda0f.firebasestorage.app",
+    messagingSenderId: "20185530890",
+    appId: "1:20185530890:web:9c51afbfeb340286e655f3"
+   };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // =========================================================
+    // 3. CALENDAR & BOOKING LOGIC
+    // =========================================================
+    const datePicker = document.getElementById('appointmentDate');
+    const slotsGrid = document.getElementById('slotsGrid');
+    const timeSlotContainer = document.getElementById('timeSlotContainer');
+    const submitBtn = document.getElementById('submitBooking');
+    let selectedTime = null;
+
+    // Prevent selecting past dates
+    const today = new Date().toISOString().split('T')[0];
+    datePicker.setAttribute('min', today);
+
+    // Generate 15-minute intervals between 5 PM (17:00) and 8 PM (20:00)
+    const generateTimeSlots = () => {
+        const slots = [];
+        let hour = 17;
+        let minute = 0;
+        
+        while (hour < 20 || (hour === 20 && minute === 0)) {
+            let timeString = `${hour > 12 ? hour - 12 : hour}:${minute === 0 ? '00' : minute} ${hour >= 12 ? 'PM' : 'AM'}`;
+            let dbTimeKey = `${hour}:${minute === 0 ? '00' : minute}`; // e.g., "17:00"
+            slots.push({ display: timeString, key: dbTimeKey });
+            
+            minute += 15;
+            if (minute === 60) {
+                hour += 1;
+                minute = 0;
+            }
+        }
+        return slots;
+    };
+
+    const allSlots = generateTimeSlots();
+
+    // When a user picks a date
+    datePicker.addEventListener('change', async (e) => {
+        const selectedDate = e.target.value;
+        if(!selectedDate) return;
+
+        timeSlotContainer.style.display = 'block';
+        slotsGrid.innerHTML = 'Loading slots...';
+        submitBtn.disabled = true;
+        selectedTime = null;
+
+        try {
+            // Check Firebase to see what slots are already booked for this date
+            const docRef = doc(db, "doctors", "XPRPLOUhZpTL7KIuK9bohFL3S0D2", "appointments", selectedDate);
+            const docSnap = await getDoc(docRef);
+            let bookedSlots = {};
+            
+            if (docSnap.exists()) {
+                bookedSlots = docSnap.data();
+            }
+
+            // Render the buttons
+            slotsGrid.innerHTML = '';
+            allSlots.forEach(slot => {
+                const btn = document.createElement('div');
+                btn.className = 'slot-btn';
+                btn.innerText = slot.display;
+                
+                // If the slot is already in Firebase, gray it out
+                if (bookedSlots[slot.key]) {
+                    btn.classList.add('booked');
+                    btn.innerText = 'Booked';
+                } else {
+                    // Make it clickable
+                    btn.addEventListener('click', () => {
+                        // Deselect others
+                        document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        selectedTime = slot.key; // e.g., "17:15"
+                        
+                        // Enable submit button if name/phone are somewhat filled
+                        checkFormValidity();
+                    });
+                }
+                slotsGrid.appendChild(btn);
+            });
+        } catch (error) {
+            console.error("Error loading slots:", error);
+            slotsGrid.innerHTML = 'Error loading slots. Check your connection.';
+        }
+    });
+
+    // Check if form is ready to submit
+    const checkFormValidity = () => {
+        const name = document.getElementById('patientName').value;
+        const phone = document.getElementById('patientPhone').value;
+        if(name.length > 2 && phone.length >= 10 && selectedTime) {
+            submitBtn.disabled = false;
+        } else {
+            submitBtn.disabled = true;
+        }
+    };
+
+    document.getElementById('patientName').addEventListener('input', checkFormValidity);
+    document.getElementById('patientPhone').addEventListener('input', checkFormValidity);
+
+    // Save Booking to Firebase
+
+
+    submitBtn.addEventListener('click', async () => {
+        const name = document.getElementById('patientName').value;
+        const phone = document.getElementById('patientPhone').value;
+        const date = datePicker.value;
+
+        submitBtn.innerText = 'Booking...';
+        submitBtn.disabled = true;
+
+        try {
+            const docRef = doc(db, "doctors", "XPRPLOUhZpTL7KIuK9bohFL3S0D2", "appointments", date);
+            
+            // We use { merge: true } so we don't overwrite other bookings on the same day
+            await setDoc(docRef, {
+                [selectedTime]: {
+                    status: "booked",
+                    patientName: name,
+                    phone: phone,
+                    source: "website"
+                }
+            }, { merge: true });
+
+
+            // 2. TRIGGER THE NOTIFICATION HERE!
+ 
+            // Show Success
+            document.getElementById('successMessage').style.display = 'block';
+            submitBtn.style.display = 'none';
+            timeSlotContainer.style.display = 'none';
+            
+        } catch (error) {
+            console.error("Error saving booking:", error);
+            alert("There was an error saving your booking. Please try again.");
+            submitBtn.innerText = 'Confirm Booking';
+            submitBtn.disabled = false;
+        }
+    });
+
+</script>
+</body>
+</html>

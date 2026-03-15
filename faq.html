@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | New Life Medical Centre</title>
+    <style>
+        /* GLOBAL (Matches your main site) */
+        :root{
+            --primary:#00796B;
+            --light:#E0F2F1;
+            --accent:#FFB300;
+            --text:#333;
+            --bg:#f7f7f7;
+        }
+
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:Segoe UI, Arial; }
+        body{ color:var(--text); line-height:1.6; background:var(--bg); }
+
+        /* NAVBAR */
+        header{ background:white; box-shadow:0 2px 6px rgba(0,0,0,.1); position:sticky; top:0; z-index:100; }
+        .nav{ max-width:1200px; margin:auto; display:flex; justify-content:space-between; align-items:center; padding:16px 20px; }
+        .logo{ font-size:20px; font-weight:bold; color:var(--primary); text-decoration:none; }
+        .logo span{ display:block; font-size:12px; color:var(--accent); }
+        .nav a.back-btn { background: var(--primary); color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; }
+        .nav a.back-btn:hover { background: #00564d; }
+
+        /* FAQ HEADER & SEARCH */
+        .faq-header { background: linear-gradient(120deg,#E0F2F1,#ffffff); padding: 60px 20px; text-align: center; }
+        .faq-header h1 { color: var(--primary); font-size: 36px; margin-bottom: 20px; }
+        
+        .search-container { max-width: 600px; margin: 0 auto; position: relative; }
+        .search-bar { width: 100%; padding: 15px 20px; font-size: 16px; border: 2px solid var(--primary); border-radius: 30px; outline: none; transition: box-shadow 0.3s; }
+        .search-bar:focus { box-shadow: 0 4px 12px rgba(0, 121, 107, 0.2); }
+
+        /* FAQ ACCORDION */
+        .faq-container { max-width: 800px; margin: 50px auto; padding: 0 20px; min-height: 50vh; }
+        .faq-item { background: white; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,.05); overflow: hidden; transition: 0.3s; }
+        
+        .faq-question { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 18px; color: var(--primary); user-select: none; }
+        .faq-question::after { content: '+'; font-size: 24px; transition: transform 0.3s; }
+        
+        .faq-answer { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease; color: #555; }
+        
+        /* Active State for Accordion */
+        .faq-item.active .faq-question::after { transform: rotate(45deg); }
+        .faq-item.active .faq-answer { padding: 0 20px 20px 20px; max-height: 500px; /* arbitrary large number for animation */ }
+
+        /* No Results Message */
+        .no-results { text-align: center; padding: 20px; color: #777; font-size: 18px; display: none; }
+
+        footer{ background:var(--primary); color:white; text-align:center; padding:25px; margin-top:40px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="nav">
+        <a href="index.html" class="logo">
+            New Life Medical Centre
+            <span>Nurturing Your Little One</span>
+        </a>
+        <a href="index.html" class="back-btn">← Back to Home</a>
+    </div>
+</header>
+
+<section class="faq-header">
+    <h1>How can we help you?</h1>
+    <div class="search-container">
+        <input type="text" id="faqSearch" class="search-bar" placeholder="Search for questions (e.g., timings, vaccines)...">
+    </div>
+</section>
+
+<section class="faq-container">
+    <div id="noResults" class="no-results">No matching questions found. Please try a different search term.</div>
+
+    <div class="faq-item">
+        <div class="faq-question">How can I book an appointment with Dr. Sakshi Batra?</div>
+        <div class="faq-answer">You can easily book an appointment by calling our clinic directly at +91 88267 48389, or by sending us a message on WhatsApp using the same number. Walk-ins are also welcome during OPD hours.</div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">What are the clinic OPD timings?</div>
+        <div class="faq-answer">The clinic is open from Monday to Saturday, between 5:00 PM and 8:00 PM. We are closed on Sundays.</div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">What is the difference between a Pediatrician and a Neonatologist?</div>
+        <div class="faq-answer">While a Pediatrician treats infants, children, and adolescents, a Neonatologist (which requires a D.M. super-specialty degree) is an expert specifically trained to handle the most complex and high-risk situations for newborns. Dr. Batra holds both qualifications, making her highly equipped to care for premature or ill infants.</div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">Do you provide standard and optional vaccinations?</div>
+        <div class="faq-answer">Yes, we provide a complete and up-to-date immunization schedule as recommended by the Indian Academy of Pediatrics (IAP). We use safe, cold-chain verified vaccines for all age groups.</div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">Until what age does Dr. Batra see patients?</div>
+        <div class="faq-answer">Dr. Batra provides pediatric consultation and treatment for children from the time of birth all the way up to 18 years of age.</div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">Where is the clinic located?</div>
+        <div class="faq-answer">We are located at A-5, Priyadarshini Vihar, Delhi – 110092. You can find a Google Maps link on our homepage for easy navigation.</div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 New Life Medical Centre</p>
+</footer>
+
+<script>
+    // ACCORDION TOGGLE LOGIC
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        question.addEventListener('click', () => {
+            // Close all other open items for a cleaner look
+            faqItems.forEach(otherItem => {
+                if(otherItem !== item) {
+                    otherItem.classList.remove('active');
+                }
+            });
+            // Toggle the clicked item
+            item.classList.toggle('active');
+        });
+    });
+
+    // LIVE SEARCH LOGIC
+    const searchBar = document.getElementById('faqSearch');
+    const noResultsMsg = document.getElementById('noResults');
+
+    searchBar.addEventListener('keyup', (e) => {
+        const term = e.target.value.toLowerCase();
+        let visibleCount = 0;
+
+        faqItems.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            if(text.includes(term)) {
+                item.style.display = 'block';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+                item.classList.remove('active'); // close it if it's hidden
+            }
+        });
+
+        // Show "No Results" message if everything is hidden
+        if(visibleCount === 0) {
+            noResultsMsg.style.display = 'block';
+        } else {
+            noResultsMsg.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>

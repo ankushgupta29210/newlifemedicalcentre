@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Best Pediatrician in East Delhi | Dr Sakshi Batra</title>
+
+<meta name="description" content="Dr Sakshi Batra Pediatrician & Neonatologist at New Life Medical Centre East Delhi. Vaccination, newborn care, pediatric consultation.">
+
+<style>
+
+/* GLOBAL */
+
+:root{
+--primary:#00796B;
+--light:#E0F2F1;
+--accent:#FFB300;
+--text:#333;
+--bg:#f7f7f7;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI, Arial;
+}
+
+body{
+color:var(--text);
+line-height:1.6;
+background:white;
+padding-bottom: 60px; /* Prevents sticky bar from hiding footer text */
+}
+
+/* NAVBAR */
+
+header{
+background:white;
+box-shadow:0 2px 6px rgba(0,0,0,.1);
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.nav{
+max-width:1200px;
+margin:auto;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:16px 20px;
+}
+
+.logo{
+font-size:20px;
+font-weight:bold;
+color:var(--primary);
+text-decoration:none;
+}
+
+.logo span{
+display:block;
+font-size:12px;
+color:var(--accent);
+}
+
+.nav a{
+margin-left:20px;
+text-decoration:none;
+color:var(--text);
+font-weight:500;
+}
+
+.nav a:hover{
+color:var(--primary);
+}
+
+/* Highlight for Book Online in Nav */
+.nav a.highlight-nav {
+color: var(--accent);
+font-weight: bold;
+}
+
+/* HERO */
+
+.hero{
+background:linear-gradient(120deg,#E0F2F1,#ffffff);
+padding:80px 20px;
+text-align:center;
+}
+
+.hero h1{
+font-size:38px;
+color:var(--primary);
+margin-bottom:10px;
+}
+
+.hero p{
+font-size:18px;
+margin-bottom:30px;
+}
+
+.btn{
+background:var(--primary);
+color:white;
+padding:14px 28px;
+border-radius:6px;
+text-decoration:none;
+font-weight:bold;
+display:inline-block;
+margin:6px;
+transition: background 0.3s;
+}
+
+.btn:hover{
+background:#00564d;
+}
+
+.btn-whatsapp{
+background:#25D366;
+}
+
+/* Styles for Book Online Button */
+.btn-online {
+background: var(--accent);
+color: var(--text);
+}
+
+.btn-online:hover {
+background: #e6a200;
+}
+
+/* SECTION */
+
+.section{
+max-width:1100px;
+margin:auto;
+padding:70px 20px;
+}
+
+.title{
+text-align:center;
+font-size:32px;
+margin-bottom:40px;
+color:var(--primary);
+}
+
+/* GRID */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+}
+
+.card{
+background:white;
+padding:28px;
+border-radius:10px;
+box-shadow:0 6px 16px rgba(0,0,0,.08);
+text-align:center;
+}
+
+.card h3{
+color:var(--primary);
+margin-bottom:10px;
+}
+
+/* ABOUT */
+
+.about{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:40px;
+align-items:center;
+}
+
+.doctor-img{
+background:#ccc;
+height:320px;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* REVIEWS */
+
+.review{
+background:var(--light);
+padding:30px;
+border-radius:10px;
+text-align:center;
+}
+
+.review p{
+font-style:italic;
+}
+
+/* CONTACT */
+
+.contact-box{
+background:var(--light);
+padding:25px;
+border-radius:10px;
+text-align:center;
+}
+
+/* MAP */
+
+.map{
+margin-top:30px;
+border-radius:10px;
+overflow:hidden;
+}
+
+/* FOOTER */
+
+footer{
+background:var(--primary);
+color:white;
+text-align:center;
+padding:25px;
+margin-top:40px;
+}
+
+/* FLOAT BUTTON */
+
+.whatsapp{
+position:fixed;
+bottom:70px; /* Moved up to clear the sticky appointment bar */
+right:20px;
+background:#25D366;
+color:white;
+padding:16px;
+border-radius:50%;
+font-size:22px;
+text-decoration:none;
+box-shadow:0 4px 10px rgba(0,0,0,.3);
+z-index:99;
+}
+
+/* STICKY APPOINTMENT BAR */
+
+.appointment-bar{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:var(--primary);
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:15px; /* Slightly reduced gap so 3 buttons fit */
+padding:12px;
+font-size:16px;
+z-index:100;
+flex-wrap: wrap; /* Allows wrapping on very small screens */
+}
+
+.appointment-bar a{
+background:white;
+color:var(--primary);
+padding:8px 15px; /* Slightly reduced padding */
+border-radius:6px;
+text-decoration:none;
+font-weight:bold;
+font-size: 14px; /* Slightly smaller text */
+}
+
+/* Sticky Online Button Style */
+.appointment-bar a.online-btn-sticky {
+background: var(--accent);
+color: var(--text);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.about{
+grid-template-columns:1fr;
+}
+
+.hero h1{
+font-size:28px;
+}
+
+/* Fixes the navigation bar overlap on small screens */
+.nav {
+flex-direction: column;
+text-align: center;
+gap: 15px;
+}
+
+.nav a {
+margin: 0 10px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="nav">
+
+<a href="index.html" class="logo">
+New Life Medical Centre
+<span>Nurturing Your Little One</span>
+</a>
+
+<div>
+<a href="booking.html" class="highlight-nav">Book Online</a>
+<a href="#about">Doctor</a>
+<a href="#services">Services</a>
+<a href="#reviews">Reviews</a>
+<a href="#contact">Contact</a>
+<a href="faq.html">FAQ</a>
+</div>
+
+</div>
+
+</header>
+
+<section class="hero">
+
+<h1>Expert Pediatric Care in East Delhi</h1>
+
+<p>Trusted care for newborns, infants, and children.</p>
+
+<a class="btn btn-online" href="booking.html">📅 Book Online Now</a>
+
+<a class="btn" href="tel:+918826748389">Call Clinic</a>
+
+<a class="btn btn-whatsapp" href="https://wa.me/918826748389?text=Hello I want appointment">WhatsApp Appointment</a>
+
+</section>
+
+<section id="about" class="section">
+
+<h2 class="title">Meet Your Doctor</h2>
+
+<div class="about">
+
+<div class="doctor-img">
+Doctor Photo
+</div>
+
+<div>
+
+<h2>Dr Sakshi Batra</h2>
+
+<p><b>MBBS, MD Pediatrics, DM Neonatology</b></p>
+
+<p>Dedicated pediatrician and neonatologist providing expert medical care for newborns, infants, and children.</p>
+
+<p style="margin-top:15px"><b>Experience:</b></p>
+
+<ul>
+<li>Kalawati Saran Children's Hospital</li>
+<li>Ram Manohar Lohia Hospital</li>
+</ul>
+
+<p style="margin-top:10px"><b>DMC No:</b> 16942</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="services" class="section">
+
+<h2 class="title">Our Services</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>Pediatric Consultation</h3>
+<p>Diagnosis and treatment for children illnesses.</p>
+</div>
+
+<div class="card">
+<h3>Newborn Care</h3>
+<p>Special care for newborn babies.</p>
+</div>
+
+<div class="card">
+<h3>Vaccination</h3>
+<p>Complete immunization schedule.</p>
+</div>
+
+<div class="card">
+<h3>Growth Monitoring</h3>
+<p>Tracking healthy development of your child.</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="reviews" class="section">
+
+<h2 class="title">Patient Reviews</h2>
+
+<div class="grid">
+
+<div class="review">
+<p>"Very caring doctor. Explained everything clearly."</p>
+<b>Parent</b>
+</div>
+
+<div class="review">
+<p>"Best pediatrician in our area."</p>
+<b>Parent</b>
+</div>
+
+<div class="review">
+<p>"Clinic is clean and staff is helpful."</p>
+<b>Parent</b>
+</div>
+
+</div>
+
+</section>
+
+<section id="contact" class="section">
+
+<h2 class="title">Visit the Clinic</h2>
+
+<div class="grid">
+
+<div class="contact-box">
+
+<h3>OPD Timings</h3>
+
+<p><b>Monday – Saturday</b></p>
+
+<p style="font-size:22px;color:var(--primary)">5 PM – 8 PM</p>
+
+</div>
+
+<div class="contact-box">
+
+<h3>Contact</h3>
+
+<p><b>Phone:</b> +91 88267 48389</p>
+
+<p style="margin-top:10px">
+
+A-5 Priyadarshini Vihar  
+Delhi 110092
+
+</p>
+
+</div>
+
+</div>
+
+<div class="map">
+
+<iframe 
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14008.113002660461!2d77.26258415!3d28.6289217!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfcac87d6d379%3A0xc3c9a01660424578!2sPriyadarshini%20Vihar%2C%20Delhi%2C%20110092%2C%20India!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" 
+    width="100%" 
+    height="320" 
+    style="border:0; border-radius: 10px;" 
+    allowfullscreen="" 
+    loading="lazy" 
+    referrerpolicy="no-referrer-when-downgrade">
+</iframe>
+
+</div>
+
+</section>
+
+<footer>
+
+<p>© 2026 New Life Medical Centre</p>
+
+<p style="font-size:12px;margin-top:5px">
+Not for medico legal purpose
+</p>
+
+</footer>
+
+<a class="whatsapp" href="https://wa.me/918826748389?text=Hello I want appointment" target="_blank">💬</a>
+
+<div class="appointment-bar">
+
+Need Appointment?
+
+<a href="booking.html" class="online-btn-sticky">Book Online</a>
+
+<a href="tel:+918826748389">Call</a>
+
+<a href="https://wa.me/918826748389?text=Hello I want appointment" target="_blank">WhatsApp</a>
+
+</div>
+
+</body>
+</html>
