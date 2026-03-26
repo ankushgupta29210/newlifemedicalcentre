@@ -187,61 +187,32 @@ header{
 .appointment-bar a.online-btn-sticky { background: var(--accent); color: var(--text); }
 
 /* MOBILE SPECIFIC REWRITE - CLEAN VERSION */
-@media(max-width:768px){
-  /* 1. Cleaner Header */
-  .nav { 
-    flex-direction: column; 
-    text-align: center; 
-    padding: 10px 5px; 
-  }
-  .nav-links { 
-    margin-top: 10px; 
-    display: flex; 
-    flex-wrap: wrap; 
-    justify-content: center; 
-    gap: 8px; 
-  }
-  .nav-links a { 
-    margin: 0; 
-    font-size: 12px; /* Slightly smaller to prevent ugly wrapping */
-    padding: 5px;
-  }
-  
-  /* 2. Remove the middle buttons so they don't fight the bottom bar */
-  .hero-buttons, .cta-container { 
-    display: none !important; 
-  }
+@media (max-width: 600px) {
+    /* Make the top links tiny and centered so they don't eat space */
+    nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px 12px; /* Small vertical gap, wider horizontal gap */
+        padding: 5px;
+    }
 
-  /* 3. Hero & About adjustments */
-  .hero { padding: 40px 20px; }
-  .hero h1 { font-size: 26px; line-height: 1.2; }
-  .hero p { font-size: 15px; }
-  .about { grid-template-columns: 1fr; text-align: center; }
-  
-  /* 4. Doctor Photo mobile polish */
-  .doctor-photo img {
-    max-width: 80%; /* Don't let the photo get too huge on mobile */
-    margin: 0 auto 20px;
-  }
+    nav li a {
+        font-size: 11px; /* Very small but readable */
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
 
-  /* 5. The Sticky Bottom Bar (The VIP Section) */
-  .appointment-text { display: none; } 
-  .appointment-bar { 
-    gap: 5px; 
-    padding: 8px; 
-    background: #004d40; /* Darker green for high contrast */
-  }
-  .appointment-bar a { 
-    flex: 1; 
-    text-align: center; 
-    font-size: 11px; 
-    padding: 10px 2px; 
-    font-weight: bold;
-    border-radius: 4px;
-  }
-  
-  /* 6. Keep WhatsApp above the bar */
-  .whatsapp { bottom: 80px; right: 15px; }
+    /* Hide the repetitive middle buttons since the bottom bar is perfect */
+    .hero-buttons {
+        display: none;
+    }
+    
+    /* Give the title some breathing room */
+    .hero h1 {
+        font-size: 24px;
+        margin-top: 10px;
+    }
 }
 </style>
 
