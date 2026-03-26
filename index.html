@@ -188,30 +188,43 @@ header{
 
 /* MOBILE SPECIFIC REWRITE - CLEAN VERSION */
 @media (max-width: 600px) {
-    /* Make the top links tiny and centered so they don't eat space */
+    /* 1. Hide the "Need Appointment?" text specifically on mobile */
+    .mobile-footer-bar span, 
+    .footer-text { 
+        display: none !important; 
+    }
+
+    /* 2. Hide those big repetitive middle buttons on mobile */
+    .hero-buttons, 
+    .action-buttons { 
+        display: none !important; 
+    }
+
+    /* 3. Fix the Header: Center everything and stack neatly */
+    header {
+        text-align: center;
+        padding: 15px 5px;
+    }
+
     nav ul {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 5px 12px; /* Small vertical gap, wider horizontal gap */
-        padding: 5px;
+        gap: 8px 15px;
+        margin-top: 10px;
+        padding: 0;
     }
 
     nav li a {
-        font-size: 11px; /* Very small but readable */
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #006666; /* Match her brand green */
     }
 
-    /* Hide the repetitive middle buttons since the bottom bar is perfect */
-    .hero-buttons {
-        display: none;
-    }
-    
-    /* Give the title some breathing room */
-    .hero h1 {
-        font-size: 24px;
-        margin-top: 10px;
+    /* 4. Make the bottom bar a single, clean row */
+    .mobile-footer-bar {
+        justify-content: space-around !important;
+        padding: 10px 5px !important;
     }
 }
 </style>
