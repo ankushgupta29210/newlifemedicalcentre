@@ -670,6 +670,26 @@ document.getElementById("navLinks").classList.toggle("active");
         border: 1px solid #eaeaea;
         line-height: 1.4;
     }
+
+    /* Container for Bot Avatar + Message */
+    .bot-msg-container {
+        display: flex;
+        align-items: flex-end; /* Aligns the avatar to the bottom of the text bubble */
+        gap: 8px;
+        margin-top: 4px;
+    }
+
+    /* The little avatar image inside the chat */
+    .bot-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        flex-shrink: 0;
+    }
+
+    
 </style>
 
 <div class="chat-widget">
@@ -682,8 +702,11 @@ document.getElementById("navLinks").classList.toggle("active");
         </div>
 
         <div id="chat-messages" class="chat-messages">
-            <div class="bot-msg">
-                Hi 👋 I'm Ami. How can I help you today?
+            <div class="bot-msg-container">
+                <img src="anime-doctor.png" class="bot-avatar" alt="Ami">
+                <div class="bot-msg">
+                    Hi 👋 I'm Ami. How can I help you today?
+                </div>
             </div>
         </div>
 
@@ -746,8 +769,13 @@ document.getElementById("navLinks").classList.toggle("active");
         chatMessages.innerHTML += `<div class="user-msg">${topic}</div>`;
 
         setTimeout(() => {
-            // Bot's response
-            chatMessages.innerHTML += `<div class="bot-msg">${faqData[topic]}</div>`;
+            // Bot's response with avatar
+            chatMessages.innerHTML += `
+                <div class="bot-msg-container">
+                    <img src="anime-doctor.png" class="bot-avatar" alt="Ami">
+                    <div class="bot-msg">${faqData[topic]}</div>
+                </div>
+            `;
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }, 400);
     }
@@ -765,8 +793,13 @@ document.getElementById("navLinks").classList.toggle("active");
             let response = getBotReply(query);
 
             setTimeout(() => {
-                // Bot's response
-                chatMessages.innerHTML += `<div class="bot-msg">${response}</div>`;
+                // Bot's response with avatar
+                chatMessages.innerHTML += `
+                    <div class="bot-msg-container">
+                        <img src="anime-doctor.png" class="bot-avatar" alt="Ami">
+                        <div class="bot-msg">${response}</div>
+                    </div>
+                `;
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, 400);
         }
