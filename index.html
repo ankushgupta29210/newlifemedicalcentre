@@ -642,123 +642,108 @@ document.getElementById("navLinks").classList.toggle("active");
 
 </div>
 
+<script src="faq-data.js"></script>
+
 <script>
-const chatToggle = document.getElementById('chat-toggle');
-const chatWindow = document.getElementById('chat-window');
-const closeChat = document.getElementById('close-chat');
-const chatMessages = document.getElementById('chat-messages');
+    const chatToggle = document.getElementById('chat-toggle');
+    const chatWindow = document.getElementById('chat-window');
+    const closeChat = document.getElementById('close-chat');
+    const chatMessages = document.getElementById('chat-messages');
 
-chatToggle.onclick = () => {
-    chatWindow.style.display = 'block';
-    chatToggle.style.display = 'none';
-};
+    chatToggle.onclick = () => {
+        chatWindow.style.display = 'block';
+        chatToggle.style.display = 'none';
+    };
 
-closeChat.onclick = () => {
-    chatWindow.style.display = 'none';
-    chatToggle.style.display = 'block';
-};
+    closeChat.onclick = () => {
+        chatWindow.style.display = 'none';
+        chatToggle.style.display = 'block';
+    };
 
-const faqData = {
-    appointment: "Click here to book via WhatsApp: <a href='https://wa.me/918826748389' target='_blank'>Book on WhatsApp</a>",
-    
-    fees: "Consultation fee is ₹500.",
-    
-    timing: "Clinic timings are Monday to Saturday, 5 PM to 8 PM.",
-    
-    location: "A-5 Priyadarshini Vihar, Delhi 110092."
-};
+    // Quick Action Data for the buttons
+    const faqData = {
+        appointment: "Click here to book via WhatsApp: <a href='https://wa.me/918826748389' target='_blank'>Book on WhatsApp</a>",
+        fees: "Consultation fee is ₹500.",
+        timing: "Clinic timings are Monday to Saturday, 5 PM to 8 PM.",
+        location: "A-5 Priyadarshini Vihar, Delhi 110092."
+    };
 
-function askQuestion(topic) {
-    chatMessages.innerHTML += `
-        <div style="text-align:right; margin-top:6px;">
-            <div style="display:inline-block; background:black; color:white; padding:6px 10px; border-radius:8px;">
-                ${topic}
-            </div>
-        </div>
-    `;
-
-    setTimeout(() => {
-        chatMessages.innerHTML += `
-            <div style="margin-top:6px;">
-                <div style="background:white; padding:6px 10px; border-radius:8px;">
-                    ${faqData[topic]}
-                </div>
-            </div>
-        `;
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 400);
-}
-function handleInput(e) {
-    if (e.key === 'Enter') {
-        let query = e.target.value.toLowerCase();
-        e.target.value = "";
-
+    function askQuestion(topic) {
         chatMessages.innerHTML += `
             <div style="text-align:right; margin-top:6px;">
-                <div style="background:black;color:white;padding:6px 10px;border-radius:8px;display:inline-block;">
-                    ${query}
+                <div style="display:inline-block; background:black; color:white; padding:6px 10px; border-radius:8px;">
+                    ${topic}
                 </div>
             </div>
         `;
-
-        let response = getBotReply(query);
 
         setTimeout(() => {
             chatMessages.innerHTML += `
                 <div style="margin-top:6px;">
-                    <div style="background:white;padding:6px 10px;border-radius:8px;">
-                        ${response}
+                    <div style="background:white; padding:6px 10px; border-radius:8px;">
+                        ${faqData[topic]}
                     </div>
                 </div>
             `;
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }, 400);
     }
-}
 
-function getBotReply(query) {
+    function handleInput(e) {
+        if (e.key === 'Enter') {
+            let query = e.target.value.toLowerCase().trim();
+            if(!query) return; // Prevent empty searches
+            
+            e.target.value = "";
 
-    query = query.toLowerCase();
+            chatMessages.innerHTML += `
+                <div style="text-align:right; margin-top:6px;">
+                    <div style="background:black;color:white;padding:6px 10px;border-radius:8px;display:inline-block;">
+                        ${query}
+                    </div>
+                </div>
+            `;
 
-    // KEYWORD MAP
-    const responses = [
-        {
-            keywords: ["fee", "fees", "price", "cost", "charge"],
-            answer: "Consultation fee is ₹500."
-        },
-        {
-            keywords: ["time", "timing", "open", "hours", "schedule"],
-            answer: "Clinic timings are Monday to Saturday, 5 PM to 8 PM."
-        },
-        {
-            keywords: ["location", "address", "where", "clinic location"],
-            answer: "A-5 Priyadarshini Vihar, Delhi 110092."
-        },
-        {
-            keywords: ["appointment", "book", "booking"],
-            answer: "You can book online or click here: <a href='https://wa.me/918826748389' target='_blank'>Book on WhatsApp</a>"
-        },
-        {
-            keywords: ["vaccine", "vaccination", "immunization", "injection"],
-            answer: "We provide all child vaccinations as per IAP schedule. You can book a vaccination appointment online."
-        }
-    ];
+            let response = getBotReply(query);
 
-    // MATCHING LOGIC
-    for (let item of responses) {
-        for (let word of item.keywords) {
-            if (query.includes(word)) {
-                return item.answer;
-            }
+            setTimeout(() => {
+                chatMessages.innerHTML += `
+                    <div style="margin-top:6px;">
+                        <div style="background:white;padding:6px 10px;border-radius:8px;">
+                            ${response}
+                        </div>
+                    </div>
+                `;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 400);
         }
     }
 
-    return "Sorry, I didn’t understand. Please try asking about fees, timing, appointment, vaccination or location.";
-}
+    function getBotReply(query) {
+        // Prioritize direct action keywords first
+        if (query === "appointment" || query.includes("book")) {
+            return faqData.appointment;
+        }
+        if (query === "fee" || query.includes("fees") || query.includes("price") || query.includes("cost")) {
+            return faqData.fees;
+        }
+        if (query === "location" || query.includes("address") || query.includes("where")) {
+            return faqData.location;
+        }
 
+        // Search the faqDatabase array (which is loaded from faq-data.js)
+        let matchedFAQs = faqDatabase.filter(faq => 
+            faq.q.toLowerCase().includes(query) || faq.a.toLowerCase().includes(query)
+        );
 
+        // If a match is found, format and return it
+        if (matchedFAQs.length > 0) {
+            return `<b style="color:#00796B;">${matchedFAQs[0].q}</b><br><br><span style="color:#555;">${matchedFAQs[0].a}</span>`;
+        }
 
-    
+        // Fallback if no match is found
+        return "Sorry, I didn’t understand. Please try asking about fees, timing, appointment, vaccination, or newborn care.";
+    }
 </script>
 
     
