@@ -210,7 +210,7 @@ padding:25px;
 margin-top:40px;
 }
 
-/* FLOAT BUTTON */
+/* FLOAT BUTTON 
 .whatsapp{
 position:fixed;
 bottom:70px;
@@ -224,7 +224,7 @@ text-decoration:none;
 box-shadow:0 4px 10px rgba(0,0,0,.3);
 z-index:99;
 }
-
+*/
 /* STICKY BAR */
 .appointment-bar{
 position:fixed;
@@ -363,7 +363,7 @@ Sakshi Batra Pediatrician
 
 <a class="btn btn-online" href="booking.html">📅 Book Online Now</a>
 <a class="btn" href="tel:+918826748389">Call Clinic</a>
-<a class="btn btn-whatsapp" href="https://wa.me/918826748389?text=Hello I want appointment">WhatsApp Appointment</a>
+
 </section>
 
 <section id="about" class="section">
@@ -581,6 +581,86 @@ document.getElementById("navLinks").classList.toggle("active");
 }
 </script>
 
+<!-- CHATBOT -->
+<div style="position:fixed; bottom:90px; right:20px; z-index:9999; display:flex; flex-direction:column; align-items:end;">
+
+    <!-- Chat Window -->
+    <div id="chat-window" style="display:none; width:300px; background:white; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.2); overflow:hidden; margin-bottom:10px;">
+
+        <div style="background:#00796B; color:white; padding:10px; display:flex; justify-content:space-between;">
+            <b>Dr Batra Assistant</b>
+            <span id="close-chat" style="cursor:pointer;">✕</span>
+        </div>
+
+        <div id="chat-messages" style="padding:10px; height:220px; overflow-y:auto; background:#f7f7f7; font-size:13px;">
+            <div style="background:white; padding:8px; border-radius:8px;">
+                Hi! How can I help you?
+            </div>
+        </div>
+
+        <div style="padding:10px; display:flex; flex-wrap:wrap; gap:6px;">
+            <button onclick="askQuestion('appointment')" style="padding:6px 10px;">Appointment</button>
+            <button onclick="askQuestion('fees')" style="padding:6px 10px;">Fees</button>
+            <button onclick="askQuestion('timing')" style="padding:6px 10px;">Timings</button>
+            <button onclick="askQuestion('location')" style="padding:6px 10px;">Location</button>
+        </div>
+    </div>
+
+    <!-- Chat Button -->
+    <div id="chat-toggle" style="background:#00796B; color:white; padding:12px 16px; border-radius:20px; cursor:pointer;">
+        Chat with us
+    </div>
+</div>
+
+<script>
+const chatToggle = document.getElementById('chat-toggle');
+const chatWindow = document.getElementById('chat-window');
+const closeChat = document.getElementById('close-chat');
+const chatMessages = document.getElementById('chat-messages');
+
+chatToggle.onclick = () => {
+    chatWindow.style.display = 'block';
+    chatToggle.style.display = 'none';
+};
+
+closeChat.onclick = () => {
+    chatWindow.style.display = 'none';
+    chatToggle.style.display = 'block';
+};
+
+const faqData = {
+    appointment: "Click here to book via WhatsApp: <a href='https://wa.me/918826748389' target='_blank'>Book on WhatsApp</a>"
+    
+    fees: "Consultation fee is ₹500.",
+    
+    timing: "Clinic timings are Monday to Saturday, 5 PM to 8 PM.",
+    
+    location: "A-5 Priyadarshini Vihar, Delhi 110092."
+};
+
+function askQuestion(topic) {
+    chatMessages.innerHTML += `
+        <div style="text-align:right; margin-top:6px;">
+            <div style="display:inline-block; background:black; color:white; padding:6px 10px; border-radius:8px;">
+                ${topic}
+            </div>
+        </div>
+    `;
+
+    setTimeout(() => {
+        chatMessages.innerHTML += `
+            <div style="margin-top:6px;">
+                <div style="background:white; padding:6px 10px; border-radius:8px;">
+                    ${faqData[topic]}
+                </div>
+            </div>
+        `;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 400);
+}
+</script>
+
+    
 </body>
 </html>
 
