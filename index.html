@@ -598,50 +598,84 @@ document.getElementById("navLinks").classList.toggle("active");
 }
 </script>
 
-<!-- CHATBOT -->
-<div style="position:fixed; bottom:90px; right:20px; z-index:9999; display:flex; flex-direction:column; align-items:flex-end;">
+<style>
+    /* Main Container */
+    .chat-widget { position: fixed; bottom: 30px; right: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    
+    /* The Chat Window */
+    .chat-window { display: none; width: 320px; background: #ffffff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); border: 1px solid #eaeaea; overflow: hidden; margin-bottom: 16px; transition: all 0.3s ease; }
+    
+    /* Header */
+    .chat-header { background: #00796B; color: white; padding: 16px; display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 600; }
+    .chat-close { cursor: pointer; opacity: 0.8; font-size: 18px; transition: opacity 0.2s; }
+    .chat-close:hover { opacity: 1; }
+    
+    /* Messages Area */
+    .chat-messages { padding: 16px; height: 260px; overflow-y: auto; background: #f9fdfc; display: flex; flex-direction: column; gap: 12px; font-size: 14px; }
+    
+    /* Custom Scrollbar to make it look clean */
+    .chat-messages::-webkit-scrollbar { width: 6px; }
+    .chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    
+    /* Speech Bubbles */
+    .bot-msg { background: white; color: #333; padding: 10px 14px; border-radius: 2px 16px 16px 16px; border: 1px solid #eaeaea; box-shadow: 0 2px 4px rgba(0,0,0,0.02); align-self: flex-start; max-width: 85%; line-height: 1.4; }
+    .user-msg { background: #00796B; color: white; padding: 10px 14px; border-radius: 16px 2px 16px 16px; align-self: flex-end; max-width: 85%; line-height: 1.4; box-shadow: 0 2px 4px rgba(0,121,107,0.2); }
+    
+    /* Input Area */
+    .chat-input-container { padding: 12px; background: white; border-top: 1px solid #eaeaea; }
+    .chat-input { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 24px; outline: none; font-size: 13px; transition: border 0.3s; box-sizing: border-box; }
+    .chat-input:focus { border-color: #00796B; }
+    
+    /* Quick Action Buttons */
+    .chat-quick-btns { padding: 0 12px 12px; background: white; display: flex; flex-wrap: wrap; gap: 8px; }
+    .quick-btn { background: #E0F2F1; color: #00796B; border: 1px solid #B2DFDB; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500; }
+    .quick-btn:hover { background: #00796B; color: white; }
+    
+    /* Floating Chat Button */
+    .chat-toggle-btn { background: #00796B; color: white; padding: 12px 20px; border-radius: 30px; box-shadow: 0 4px 12px rgba(0,121,107,0.3); display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: transform 0.2s; border: none; }
+    .chat-toggle-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,121,107,0.4); }
+    .chat-toggle-btn img { width: 24px; height: 24px; }
+</style>
 
-    <!-- Chat Window -->
-    <div id="chat-window" style="display:none; width:300px; background:white; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.2); overflow:hidden; margin-bottom:10px;">
+<div class="chat-widget">
 
-        <div style="background:#00796B; color:white; padding:10px; display:flex; justify-content:space-between;">
-            <b>Dr Batra Assistant</b>
-            <span id="close-chat" style="cursor:pointer;">✕</span>
+    <div id="chat-window" class="chat-window">
+        
+        <div class="chat-header">
+            <span>Dr Batra Assistant</span>
+            <span id="close-chat" class="chat-close">✕</span>
         </div>
 
-        <div id="chat-messages" style="padding:10px; height:220px; overflow-y:auto; background:#f7f7f7; font-size:13px;">
-            <div style="background:white; padding:8px; border-radius:8px;">
-                Hi 👋 How can I help you?
+        <div id="chat-messages" class="chat-messages">
+            <div class="bot-msg">
+                Hi 👋 How can I help you today?
             </div>
         </div>
 
-        <!-- SEARCH INPUT -->
-        <div style="padding:10px;">
+        <div class="chat-input-container">
             <input 
                 id="chat-input"
-                placeholder="Ask anything (fees, timing, location...)"
-                style="width:100%; padding:8px; border:1px solid #ccc; border-radius:6px;"
+                class="chat-input"
+                placeholder="Ask about fees, timing, location..."
                 onkeydown="handleInput(event)"
             >
         </div>
 
-        <!-- QUICK BUTTONS -->
-        <div style="padding:10px; display:flex; flex-wrap:wrap; gap:6px;">
-            <button onclick="askQuestion('appointment')">Appointment</button>
-            <button onclick="askQuestion('fees')">Fees</button>
-            <button onclick="askQuestion('timing')">Timings</button>
-            <button onclick="askQuestion('location')">Location</button>
+        <div class="chat-quick-btns">
+            <button class="quick-btn" onclick="askQuestion('appointment')">Appointment</button>
+            <button class="quick-btn" onclick="askQuestion('fees')">Fees</button>
+            <button class="quick-btn" onclick="askQuestion('timing')">Timings</button>
+            <button class="quick-btn" onclick="askQuestion('location')">Location</button>
         </div>
     </div>
 
-    <!-- Chat Button -->
-    <div id="chat-toggle" class="chat-btn">
-       <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" class="doc-avatar">
+    <button id="chat-toggle" class="chat-toggle-btn">
+       <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" alt="Doctor Icon">
        <span>Hi 👋 Ask Doctor</span>
-    </div>
+    </button>
 
 </div>
-
 <script src="faq-data.js"></script>
 
 <script>
