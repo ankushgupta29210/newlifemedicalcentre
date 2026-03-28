@@ -600,8 +600,7 @@ document.getElementById("navLinks").classList.toggle("active");
 
 <style>
     /* Main Container */
-    .chat-widget { position: fixed; bottom: 30px; right: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    
+    .chat-widget { position: fixed; bottom: 80px; right: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     /* The Chat Window */
     .chat-window { display: none; width: 320px; background: #ffffff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); border: 1px solid #eaeaea; overflow: hidden; margin-bottom: 16px; transition: all 0.3s ease; }
     
@@ -703,22 +702,12 @@ document.getElementById("navLinks").classList.toggle("active");
     };
 
     function askQuestion(topic) {
-        chatMessages.innerHTML += `
-            <div style="text-align:right; margin-top:6px;">
-                <div style="display:inline-block; background:black; color:white; padding:6px 10px; border-radius:8px;">
-                    ${topic}
-                </div>
-            </div>
-        `;
+        // User's quick-action click
+        chatMessages.innerHTML += `<div class="user-msg">${topic}</div>`;
 
         setTimeout(() => {
-            chatMessages.innerHTML += `
-                <div style="margin-top:6px;">
-                    <div style="background:white; padding:6px 10px; border-radius:8px;">
-                        ${faqData[topic]}
-                    </div>
-                </div>
-            `;
+            // Bot's response
+            chatMessages.innerHTML += `<div class="bot-msg">${faqData[topic]}</div>`;
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }, 400);
     }
@@ -730,24 +719,14 @@ document.getElementById("navLinks").classList.toggle("active");
             
             e.target.value = "";
 
-            chatMessages.innerHTML += `
-                <div style="text-align:right; margin-top:6px;">
-                    <div style="background:black;color:white;padding:6px 10px;border-radius:8px;display:inline-block;">
-                        ${query}
-                    </div>
-                </div>
-            `;
+            // User's typed message
+            chatMessages.innerHTML += `<div class="user-msg">${query}</div>`;
 
             let response = getBotReply(query);
 
             setTimeout(() => {
-                chatMessages.innerHTML += `
-                    <div style="margin-top:6px;">
-                        <div style="background:white;padding:6px 10px;border-radius:8px;">
-                            ${response}
-                        </div>
-                    </div>
-                `;
+                // Bot's response
+                chatMessages.innerHTML += `<div class="bot-msg">${response}</div>`;
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, 400);
         }
