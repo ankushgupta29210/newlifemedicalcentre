@@ -583,7 +583,24 @@ document.getElementById("navLinks").classList.toggle("active");
 </script>
 
 <!-- CHATBOT -->
-<div style="position:fixed; bottom:90px; right:20px; z-index:9999; display:flex; flex-direction:column; align-items:end;">
+<div style="padding:10px;">
+    
+    <input 
+        id="chat-input"
+        placeholder="Type your question..."
+        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; margin-bottom:8px;"
+        onkeydown="handleInput(event)"
+    >
+
+    <div style="display:flex; flex-wrap:wrap; gap:6px;">
+        <button onclick="askQuestion('appointment')">Appointment</button>
+        <button onclick="askQuestion('fees')">Fees</button>
+        <button onclick="askQuestion('timing')">Timings</button>
+        <button onclick="askQuestion('location')">Location</button>
+    </div>
+
+</div>
+
 
     <!-- Chat Window -->
     <div id="chat-window" style="display:none; width:300px; background:white; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.2); overflow:hidden; margin-bottom:10px;">
@@ -609,7 +626,7 @@ document.getElementById("navLinks").classList.toggle("active");
 
     <!-- Chat Button -->
     <div id="chat-toggle" style="background:#00796B; color:white; padding:12px 16px; border-radius:20px; cursor:pointer;">
-        Chat with us
+        Hi 👋 How can I help?
     </div>
 </div>
 
@@ -659,6 +676,61 @@ function askQuestion(topic) {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }, 400);
 }
+function handleInput(e) {
+    if (e.key === 'Enter') {
+        let query = e.target.value.toLowerCase();
+        e.target.value = "";
+
+        chatMessages.innerHTML += `
+            <div style="text-align:right; margin-top:6px;">
+                <div style="background:black;color:white;padding:6px 10px;border-radius:8px;display:inline-block;">
+                    ${query}
+                </div>
+            </div>
+        `;
+
+        let response = getBotReply(query);
+
+        setTimeout(() => {
+            chatMessages.innerHTML += `
+                <div style="margin-top:6px;">
+                    <div style="background:white;padding:6px 10px;border-radius:8px;">
+                        ${response}
+                    </div>
+                </div>
+            `;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 400);
+    }
+}
+
+function getBotReply(query) {
+
+    if (query.includes("fee") || query.includes("price")) {
+        return "Consultation fee is ₹500.";
+    }
+
+    if (query.includes("time") || query.includes("timing") || query.includes("open")) {
+        return "Clinic timings are Monday to Saturday, 5 PM to 8 PM.";
+    }
+
+    if (query.includes("where") || query.includes("location") || query.includes("address")) {
+        return "A-5 Priyadarshini Vihar, Delhi 110092.";
+    }
+
+    if (query.includes("book") || query.includes("appointment")) {
+        return "You can book online or click here: <a href='https://wa.me/918826748389' target='_blank'>Book on WhatsApp</a>";
+    }
+
+    if (query.includes("vaccine")) {
+        return "We provide all child vaccinations as per IAP schedule.";
+    }
+
+    return "Sorry, I didn’t understand. Please try asking about fees, timing, appointment or location.";
+}
+
+
+    
 </script>
 
     
