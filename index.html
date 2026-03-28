@@ -718,28 +718,44 @@ function handleInput(e) {
 
 function getBotReply(query) {
 
-    if (query.includes("fee") || query.includes("price")) {
-        return "Consultation fee is ₹500.";
+    query = query.toLowerCase();
+
+    // KEYWORD MAP
+    const responses = [
+        {
+            keywords: ["fee", "fees", "price", "cost", "charge"],
+            answer: "Consultation fee is ₹500."
+        },
+        {
+            keywords: ["time", "timing", "open", "hours", "schedule"],
+            answer: "Clinic timings are Monday to Saturday, 5 PM to 8 PM."
+        },
+        {
+            keywords: ["location", "address", "where", "clinic location"],
+            answer: "A-5 Priyadarshini Vihar, Delhi 110092."
+        },
+        {
+            keywords: ["appointment", "book", "booking"],
+            answer: "You can book online or click here: <a href='https://wa.me/918826748389' target='_blank'>Book on WhatsApp</a>"
+        },
+        {
+            keywords: ["vaccine", "vaccination", "immunization", "injection"],
+            answer: "We provide all child vaccinations as per IAP schedule. You can book a vaccination appointment online."
+        }
+    ];
+
+    // MATCHING LOGIC
+    for (let item of responses) {
+        for (let word of item.keywords) {
+            if (query.includes(word)) {
+                return item.answer;
+            }
+        }
     }
 
-    if (query.includes("time") || query.includes("timing") || query.includes("open")) {
-        return "Clinic timings are Monday to Saturday, 5 PM to 8 PM.";
-    }
-
-    if (query.includes("where") || query.includes("location") || query.includes("address")) {
-        return "A-5 Priyadarshini Vihar, Delhi 110092.";
-    }
-
-    if (query.includes("book") || query.includes("appointment")) {
-        return "You can book online or click here: <a href='https://wa.me/918826748389' target='_blank'>Book on WhatsApp</a>";
-    }
-
-    if (query.includes("vaccine")) {
-        return "We provide all child vaccinations as per IAP schedule.";
-    }
-
-    return "Sorry, I didn’t understand. Please try asking about fees, timing, appointment or location.";
+    return "Sorry, I didn’t understand. Please try asking about fees, timing, appointment, vaccination or location.";
 }
+
 
 
     
