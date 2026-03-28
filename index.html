@@ -720,7 +720,7 @@ document.getElementById("navLinks").classList.toggle("active");
     }
 
     function getBotReply(query) {
-        // Prioritize direct action keywords first
+        // 1. Prioritize direct action keywords first
         if (query === "appointment" || query.includes("book")) {
             return faqData.appointment;
         }
@@ -731,17 +731,26 @@ document.getElementById("navLinks").classList.toggle("active");
             return faqData.location;
         }
 
-        // Search the faqDatabase array (which is loaded from faq-data.js)
+        // 2. Search the faqDatabase array
         let matchedFAQs = faqDatabase.filter(faq => 
             faq.q.toLowerCase().includes(query) || faq.a.toLowerCase().includes(query)
         );
 
-        // If a match is found, format and return it
+        // 3. NEW: If matches are found, format ALL of them
         if (matchedFAQs.length > 0) {
-            return `<b style="color:#00796B;">${matchedFAQs[0].q}</b><br><br><span style="color:#555;">${matchedFAQs[0].a}</span>`;
+            
+            // Optional: Add a friendly intro if there are multiple matches
+            let introText = matchedFAQs.length > 1 ? `<span style="color:#888; font-size:11px; display:block; margin-bottom:8px;">I found ${matchedFAQs.length} related answers:</span>` : '';
+
+            // Map through every matched FAQ and format it
+            let formattedMatches = matchedFAQs.map(faq => 
+                `<b style="color:#00796B;">${faq.q}</b><br><span style="color:#555; display:inline-block; margin-top:4px;">${faq.a}</span>`
+            ).join('<hr style="border:0; border-top:1px solid #eee; margin:12px 0;">'); // This adds a subtle line between multiple answers
+
+            return introText + formattedMatches;
         }
 
-        // Fallback if no match is found
+        // 4. Fallback if no match is found
         return "Sorry, I didn’t understand. Please try asking about fees, timing, appointment, vaccination, or newborn care.";
     }
 </script>
