@@ -225,6 +225,22 @@ box-shadow:0 4px 10px rgba(0,0,0,.3);
 z-index:99;
 }
 */
+
+.doc-avatar{
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    animation:float 2s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-4px);}
+    100%{transform:translateY(0);}
+}
+    
+
+    
 /* STICKY BAR */
 .appointment-bar{
 position:fixed;
@@ -619,8 +635,9 @@ document.getElementById("navLinks").classList.toggle("active");
     </div>
 
     <!-- Chat Button -->
-    <div id="chat-toggle" style="background:#00796B; color:white; padding:12px 16px; border-radius:20px; cursor:pointer;">
-        Hi 👋 How can I help?
+    <div id="chat-toggle" class="chat-btn">
+       <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" class="doc-avatar">
+       <span>Hi 👋 Ask Doctor</span>
     </div>
 
 </div>
