@@ -583,24 +583,7 @@ document.getElementById("navLinks").classList.toggle("active");
 </script>
 
 <!-- CHATBOT -->
-<div style="padding:10px;">
-    
-    <input 
-        id="chat-input"
-        placeholder="Type your question..."
-        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; margin-bottom:8px;"
-        onkeydown="handleInput(event)"
-    >
-
-    <div style="display:flex; flex-wrap:wrap; gap:6px;">
-        <button onclick="askQuestion('appointment')">Appointment</button>
-        <button onclick="askQuestion('fees')">Fees</button>
-        <button onclick="askQuestion('timing')">Timings</button>
-        <button onclick="askQuestion('location')">Location</button>
-    </div>
-
-</div>
-
+<div style="position:fixed; bottom:90px; right:20px; z-index:9999; display:flex; flex-direction:column; align-items:flex-end;">
 
     <!-- Chat Window -->
     <div id="chat-window" style="display:none; width:300px; background:white; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.2); overflow:hidden; margin-bottom:10px;">
@@ -612,15 +595,26 @@ document.getElementById("navLinks").classList.toggle("active");
 
         <div id="chat-messages" style="padding:10px; height:220px; overflow-y:auto; background:#f7f7f7; font-size:13px;">
             <div style="background:white; padding:8px; border-radius:8px;">
-                Hi! How can I help you?
+                Hi 👋 How can I help you?
             </div>
         </div>
 
+        <!-- SEARCH INPUT -->
+        <div style="padding:10px;">
+            <input 
+                id="chat-input"
+                placeholder="Ask anything (fees, timing, location...)"
+                style="width:100%; padding:8px; border:1px solid #ccc; border-radius:6px;"
+                onkeydown="handleInput(event)"
+            >
+        </div>
+
+        <!-- QUICK BUTTONS -->
         <div style="padding:10px; display:flex; flex-wrap:wrap; gap:6px;">
-            <button onclick="askQuestion('appointment')" style="padding:6px 10px;">Appointment</button>
-            <button onclick="askQuestion('fees')" style="padding:6px 10px;">Fees</button>
-            <button onclick="askQuestion('timing')" style="padding:6px 10px;">Timings</button>
-            <button onclick="askQuestion('location')" style="padding:6px 10px;">Location</button>
+            <button onclick="askQuestion('appointment')">Appointment</button>
+            <button onclick="askQuestion('fees')">Fees</button>
+            <button onclick="askQuestion('timing')">Timings</button>
+            <button onclick="askQuestion('location')">Location</button>
         </div>
     </div>
 
@@ -628,6 +622,7 @@ document.getElementById("navLinks").classList.toggle("active");
     <div id="chat-toggle" style="background:#00796B; color:white; padding:12px 16px; border-radius:20px; cursor:pointer;">
         Hi 👋 How can I help?
     </div>
+
 </div>
 
 <script>
