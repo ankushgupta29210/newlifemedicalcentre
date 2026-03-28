@@ -276,6 +276,10 @@ color:var(--text);
 /* MOBILE */
 @media(max-width:768px){
 
+ .hide-on-mobile {
+        display: none;
+    }   
+
 .menu-toggle{
 display:block;
 }
@@ -581,15 +585,10 @@ Not for medico legal purpose
 <a class="whatsapp" href="https://wa.me/918826748389?text=Hello I want appointment" target="_blank">💬</a>
 
 <div class="appointment-bar">
-
-Need Appointment?
-
-<a href="booking.html" class="online-btn-sticky">Book Online</a>
-
-<a href="tel:+918826748389">Call</a>
-
-<a href="https://wa.me/918826748389?text=Hello I want appointment" target="_blank">WhatsApp</a>
-
+    <span class="hide-on-mobile">Need Appointment?</span>
+    <a href="booking.html" class="online-btn-sticky">Book Online</a>
+    <a href="tel:+918826748389">Call</a>
+    <a href="https://wa.me/918826748389?text=Hello I want appointment" target="_blank">WhatsApp</a>
 </div>
 
 <script>
