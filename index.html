@@ -839,59 +839,86 @@ function getBotReply(query) {
     let cleanQuery = query.toLowerCase().replace(/[.,!?]/g, '');
     let words = cleanQuery.split(" ");
 
-    // 🔥 Decision Tree First
+    // --- 1. CONVERSATIONAL & SMALL TALK LAYER (KEEP FIRST) ---
+    const greetings = ["hi", "hello", "hey", "namaste"];
+    if (greetings.some(greet => words.includes(greet))) {
+        return "Hello there! 👋 I'm Ami, Dr. Batra's assistant. How can I help you and your little one today?";
+    }
+
+    if (cleanQuery.includes("how are you")) {
+        return "I'm doing great, thank you for asking! 😊 I'm here to help you with clinic details or booking an appointment. What do you need help with?";
+    }
+
+    if (cleanQuery.includes("who is") || cleanQuery.includes("dr batra") || cleanQuery.includes("about doctor")) {
+        return "Dr. Sakshi Batra is a Pediatrician and Neonatologist with over 9 years of experience. She specializes in newborn care, vaccinations, and childhood illnesses.";
+    }
+
+    if (cleanQuery.includes("thank you") || cleanQuery.includes("thanks") || cleanQuery.includes("thx")) {
+        return "You're very welcome! Let me know if you need anything else.";
+    }
+
+    if (cleanQuery.includes("bye") || cleanQuery.includes("goodbye")) {
+        return "Goodbye! Wishing you and your family great health. 🌟";
+    }
+
+    if (cleanQuery.includes("who are you") || cleanQuery.includes("your name")) {
+        return "I'm Ami! A virtual assistant built to help you quickly find information about Dr. Batra's pediatric clinic.";
+    }
+
+    // 🔥 2. DECISION TREE (MOVE HERE)
     let flowReply = handleDecisionFlow(cleanQuery);
     if (flowReply) return flowReply;
 
-    // Greetings
-    if (["hi","hello","hey","namaste"].some(g => words.includes(g))) {
-        return "Hello 👋 I'm Ami. How can I help you today?";
-    }
-
-    if (cleanQuery.includes("who is") || cleanQuery.includes("dr batra")) {
-        return "Dr. Sakshi Batra is a Pediatrician with 9+ years of experience in child care and newborn treatment.";
-    }
-
-    if (cleanQuery.includes("thanks")) {
-        return "You're welcome 😊";
-    }
-
-    // Direct keywords
+    // --- 3. DIRECT ACTION KEYWORDS ---
     if (cleanQuery.includes("appointment") || cleanQuery.includes("book")) {
         return faqData.appointment;
     }
-
-    if (cleanQuery.includes("fee") || cleanQuery.includes("cost")) {
+    if (cleanQuery.includes("fee") || cleanQuery.includes("price") || cleanQuery.includes("cost") || cleanQuery.includes("charge")) {
         return faqData.fees;
     }
-
-    if (cleanQuery.includes("time") || cleanQuery.includes("timing")) {
+    if (cleanQuery.includes("location") || cleanQuery.includes("address") || cleanQuery.includes("where")) {
+        return faqData.location;
+    }
+    if (cleanQuery.includes("time") || cleanQuery.includes("timing") || cleanQuery.includes("timming") || cleanQuery.includes("hours") || cleanQuery.includes("open")) {
         return faqData.timing;
     }
 
-    if (cleanQuery.includes("location") || cleanQuery.includes("address")) {
-        return faqData.location;
-    }
+    // --- 4. FAQ SEARCH (UNCHANGED) ---
+    let ignoreWords = ["child","baby","infant","newborn","parent","doctor","pediatrician","what","when","how","why","where","should","could","would","will","does","this","that","have","with","from","into"];
 
-    // FAQ search
-    let matched = faqDatabase.filter(faq => {
-        let text = (faq.q + " " + faq.a).toLowerCase();
-        return text.includes(cleanQuery);
+    let searchKeywords = words.filter(w => w.length > 3 && !ignoreWords.includes(w));
+
+    if (cleanQuery.includes("frever")) searchKeywords.push("fever");
+    if (cleanQuery.includes("vacin")) searchKeywords.push("vaccin");
+
+    let matchedFAQs = faqDatabase.filter(faq => {
+        let textToSearch = (faq.q + " " + faq.a).toLowerCase();
+        if (textToSearch.includes(cleanQuery)) return true;
+        return searchKeywords.some(keyword => textToSearch.includes(keyword));
     });
 
-    if (matched.length > 0) {
-        return matched.map(f => `<b>${f.q}</b><br>${f.a}`).join("<hr>");
+    if (matchedFAQs.length > 0) {
+        let introText = matchedFAQs.length > 1 
+            ? `<span style="color:#888;font-size:11px;display:block;margin-bottom:8px;">I found ${matchedFAQs.length} related answers:</span>` 
+            : '';
+
+        let formattedMatches = matchedFAQs.map(faq => 
+            `<b style="color:#00796B;">${faq.q}</b><br><span style="color:#555;">${faq.a}</span>`
+        ).join('<hr style="border:0;border-top:1px solid #eee;margin:12px 0;">');
+
+        return introText + formattedMatches;
     }
 
-    // 🔥 SMART ESCALATION (NEW)
+    // 🔥 5. SMART ESCALATION (REPLACE YOUR OLD FALLBACK)
     return `
-    I’m not fully sure 🤔<br><br>
+    I'm not fully sure about that 🤔<br><br>
     You can:<br><br>
     <a href="tel:+918826748389">📞 Call Doctor</a><br>
     <a href="https://wa.me/918826748389" target="_blank">💬 WhatsApp</a><br>
     <a href="booking.html">📅 Book Appointment</a>
     `;
 }
+
 </script>
     
 
