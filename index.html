@@ -709,155 +709,191 @@ document.getElementById("navLinks").classList.toggle("active");
     </button>
 
 </div>
+
+
 <script src="faq-data.js"></script>
 
 <script>
-    const chatToggle = document.getElementById('chat-toggle');
-    const chatWindow = document.getElementById('chat-window');
-    const closeChat = document.getElementById('close-chat');
-    const chatMessages = document.getElementById('chat-messages');
+const chatToggle = document.getElementById('chat-toggle');
+const chatWindow = document.getElementById('chat-window');
+const closeChat = document.getElementById('close-chat');
+const chatMessages = document.getElementById('chat-messages');
 
-    chatToggle.onclick = () => {
-        chatWindow.style.display = 'block';
-        chatToggle.style.display = 'none';
-    };
+let currentFlow = null; // 🔥 decision flow state
 
-    closeChat.onclick = () => {
-        chatWindow.style.display = 'none';
-        chatToggle.style.display = 'block';
-    };
+chatToggle.onclick = () => {
+    chatWindow.style.display = 'block';
+    chatToggle.style.display = 'none';
+};
 
-    // Quick Action Data for the buttons
-    const faqData = {
-        appointment: "Click here to book via WhatsApp: <a href='https://wa.me/918826748389' target='_blank'>Book on WhatsApp</a>",
-        fees: "Consultation fee is ₹500.",
-        timing: "Clinic timings are Monday to Saturday, 5 PM to 8 PM.",
-        location: "A-5 Priyadarshini Vihar, Delhi 110092."
-    };
+closeChat.onclick = () => {
+    chatWindow.style.display = 'none';
+    chatToggle.style.display = 'block';
+};
 
-    function askQuestion(topic) {
-        // User's quick-action click
-        chatMessages.innerHTML += `<div class="user-msg">${topic}</div>`;
+// ✅ Query Tracking (logs user behavior)
+function trackQuery(query) {
+    console.log("User asked:", query);
+
+    let logs = JSON.parse(localStorage.getItem("chatLogs")) || [];
+    logs.push({ q: query, time: new Date().toISOString() });
+    localStorage.setItem("chatLogs", JSON.stringify(logs));
+}
+
+// ✅ Add bot message helper
+function addBotMessage(message) {
+    chatMessages.innerHTML += `
+        <div class="bot-msg-container">
+            <img src="anime-doctor.png" class="bot-avatar">
+            <div class="bot-msg">${message}</div>
+        </div>
+    `;
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// ✅ Decision Tree Logic
+function handleDecisionFlow(query) {
+    if (query.includes("fever") || query.includes("bukhar")) {
+        currentFlow = "fever_age";
+
+        return `
+        Your baby has fever? 👶<br><br>
+        How old is your baby?<br><br>
+        <button class="quick-btn" onclick="handleFlowAnswer('0-3')">0–3 months</button>
+        <button class="quick-btn" onclick="handleFlowAnswer('3-12')">3–12 months</button>
+        <button class="quick-btn" onclick="handleFlowAnswer('1+')">1+ year</button>
+        `;
+    }
+
+    return null;
+}
+
+// ✅ Handle flow answers
+function handleFlowAnswer(answer) {
+    let response = "";
+
+    if (currentFlow === "fever_age") {
+        if (answer === "0-3") {
+            response = "⚠️ For babies under 3 months, fever can be serious. Please consult the doctor immediately.";
+        } 
+        else if (answer === "3-12") {
+            response = "For babies 3–12 months: Monitor temperature, keep baby hydrated. If fever persists, consult doctor.";
+        } 
+        else {
+            response = "For children above 1 year: Give fluids and rest. If fever lasts more than 2 days, consult doctor.";
+        }
+
+        currentFlow = null;
+    }
+
+    addBotMessage(response);
+}
+
+// Quick buttons
+const faqData = {
+    appointment: "Click here: <a href='https://wa.me/918826748389' target='_blank'>Book on WhatsApp</a>",
+    fees: "Consultation fee is ₹500.",
+    timing: "Clinic timings are Monday to Saturday, 5 PM to 8 PM.",
+    location: "A-5 Priyadarshini Vihar, Delhi 110092."
+};
+
+function askQuestion(topic) {
+    chatMessages.innerHTML += `<div class="user-msg">${topic}</div>`;
+
+    setTimeout(() => {
+        addBotMessage(faqData[topic]);
+    }, 400);
+}
+
+// Main input handler
+function handleInput(e) {
+    if (e.key === 'Enter') {
+        let query = e.target.value.toLowerCase().trim();
+        if (!query) return;
+
+        e.target.value = "";
+
+        // Show user msg
+        chatMessages.innerHTML += `<div class="user-msg">${query}</div>`;
+
+        // 🔥 Track query
+        trackQuery(query);
+
+        // 🔥 Typing effect
+        addBotMessage("Typing...");
 
         setTimeout(() => {
-            // Bot's response with avatar
-            chatMessages.innerHTML += `
-                <div class="bot-msg-container">
-                    <img src="anime-doctor.png" class="bot-avatar" alt="Ami">
-                    <div class="bot-msg">${faqData[topic]}</div>
-                </div>
-            `;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }, 400);
-    }
-
-    function handleInput(e) {
-        if (e.key === 'Enter') {
-            let query = e.target.value.toLowerCase().trim();
-            if(!query) return; // Prevent empty searches
-            
-            e.target.value = "";
-
-            // User's typed message
-            chatMessages.innerHTML += `<div class="user-msg">${query}</div>`;
-
             let response = getBotReply(query);
 
-            setTimeout(() => {
-                // Bot's response with avatar
-                chatMessages.innerHTML += `
-                    <div class="bot-msg-container">
-                        <img src="anime-doctor.png" class="bot-avatar" alt="Ami">
-                        <div class="bot-msg">${response}</div>
-                    </div>
-                `;
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 400);
-        }
+            // remove typing
+            let msgs = document.querySelectorAll(".bot-msg");
+            msgs[msgs.length - 1].innerHTML = response;
+
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 700);
+    }
+}
+
+// Main logic
+function getBotReply(query) {
+    let cleanQuery = query.toLowerCase().replace(/[.,!?]/g, '');
+    let words = cleanQuery.split(" ");
+
+    // 🔥 Decision Tree First
+    let flowReply = handleDecisionFlow(cleanQuery);
+    if (flowReply) return flowReply;
+
+    // Greetings
+    if (["hi","hello","hey","namaste"].some(g => words.includes(g))) {
+        return "Hello 👋 I'm Ami. How can I help you today?";
     }
 
-    function getBotReply(query) {
-        // Clean up punctuation so it doesn't break our search
-        let cleanQuery = query.toLowerCase().replace(/[.,!?]/g, '');
-        let words = cleanQuery.split(" ");
-
-        // --- 1. CONVERSATIONAL & SMALL TALK LAYER ---
-        const greetings = ["hi", "hello", "hey", "namaste"];
-        if (greetings.some(greet => words.includes(greet))) {
-            return "Hello there! 👋 I'm Ami, Dr. Batra's assistant. How can I help you and your little one today?";
-        }
-
-        if (cleanQuery.includes("how are you")) {
-            return "I'm doing great, thank you for asking! 😊 I'm here to help you with clinic details or booking an appointment. What do you need help with?";
-        }
-
-        // ADDED: Handles questions about the doctor!
-        if (cleanQuery.includes("who is") || cleanQuery.includes("dr batra") || cleanQuery.includes("about doctor")) {
-            return "Dr. Sakshi Batra is a Pediatrician and Neonatologist with over 9 years of experience. She specializes in newborn care, vaccinations, and childhood illnesses. You can read more about her in the 'Meet Your Doctor' section above!";
-        }
-
-        if (cleanQuery.includes("thank you") || cleanQuery.includes("thanks") || cleanQuery.includes("thx")) {
-            return "You're very welcome! Let me know if you need anything else.";
-        }
-
-        if (cleanQuery.includes("bye") || cleanQuery.includes("goodbye")) {
-            return "Goodbye! Wishing you and your family great health. 🌟";
-        }
-
-        if (cleanQuery.includes("who are you") || cleanQuery.includes("your name")) {
-            return "I'm Ami! A virtual assistant built to help you quickly find information about Dr. Batra's pediatric clinic.";
-        }
-
-        // --- 2. DIRECT ACTION KEYWORDS ---
-        if (cleanQuery.includes("appointment") || cleanQuery.includes("book")) {
-            return faqData.appointment;
-        }
-        if (cleanQuery.includes("fee") || cleanQuery.includes("price") || cleanQuery.includes("cost") || cleanQuery.includes("charge")) {
-            return faqData.fees;
-        }
-        if (cleanQuery.includes("location") || cleanQuery.includes("address") || cleanQuery.includes("where")) {
-            return faqData.location;
-        }
-        if (cleanQuery.includes("time") || cleanQuery.includes("timing") || cleanQuery.includes("timming") || cleanQuery.includes("hours") || cleanQuery.includes("open")) {
-            return faqData.timing;
-        }
-
-        // --- 3. SMARTER FAQ SEARCH ---
-        // Words to ignore so we don't accidentally match every single FAQ
-        let ignoreWords = ["child", "baby", "infant", "newborn", "parent", "doctor", "pediatrician", "what", "when", "how", "why", "where", "should", "could", "would", "will", "does", "this", "that", "have", "with", "from", "into"];
-
-        // Extract important keywords (longer than 3 letters and not in the ignore list)
-        let searchKeywords = words.filter(w => w.length > 3 && !ignoreWords.includes(w));
-
-        // Catch common typos manually
-        if (cleanQuery.includes("frever")) searchKeywords.push("fever");
-        if (cleanQuery.includes("vacin")) searchKeywords.push("vaccin");
-
-        let matchedFAQs = faqDatabase.filter(faq => {
-            let textToSearch = (faq.q + " " + faq.a).toLowerCase();
-
-            // Match exact phrase first
-            if (textToSearch.includes(cleanQuery)) return true;
-
-            // Match individual important keywords (like "fever")
-            return searchKeywords.some(keyword => textToSearch.includes(keyword));
-        });
-
-        // --- 4. FORMAT MULTIPLE MATCHES ---
-        if (matchedFAQs.length > 0) {
-            let introText = matchedFAQs.length > 1 ? `<span style="color:#888; font-size:11px; display:block; margin-bottom:8px;">I found ${matchedFAQs.length} related answers:</span>` : '';
-
-            let formattedMatches = matchedFAQs.map(faq => 
-                `<b style="color:#00796B;">${faq.q}</b><br><span style="color:#555; display:inline-block; margin-top:4px;">${faq.a}</span>`
-            ).join('<hr style="border:0; border-top:1px solid #eee; margin:12px 0;">');
-
-            return introText + formattedMatches;
-        }
-
-        // --- 5. FALLBACK ---
-        return "I'm still learning! 😅 Could you try asking about fees, timing, location, or how to book an appointment?";
+    if (cleanQuery.includes("who is") || cleanQuery.includes("dr batra")) {
+        return "Dr. Sakshi Batra is a Pediatrician with 9+ years of experience in child care and newborn treatment.";
     }
+
+    if (cleanQuery.includes("thanks")) {
+        return "You're welcome 😊";
+    }
+
+    // Direct keywords
+    if (cleanQuery.includes("appointment") || cleanQuery.includes("book")) {
+        return faqData.appointment;
+    }
+
+    if (cleanQuery.includes("fee") || cleanQuery.includes("cost")) {
+        return faqData.fees;
+    }
+
+    if (cleanQuery.includes("time") || cleanQuery.includes("timing")) {
+        return faqData.timing;
+    }
+
+    if (cleanQuery.includes("location") || cleanQuery.includes("address")) {
+        return faqData.location;
+    }
+
+    // FAQ search
+    let matched = faqDatabase.filter(faq => {
+        let text = (faq.q + " " + faq.a).toLowerCase();
+        return text.includes(cleanQuery);
+    });
+
+    if (matched.length > 0) {
+        return matched.map(f => `<b>${f.q}</b><br>${f.a}`).join("<hr>");
+    }
+
+    // 🔥 SMART ESCALATION (NEW)
+    return `
+    I’m not fully sure 🤔<br><br>
+    You can:<br><br>
+    <a href="tel:+918826748389">📞 Call Doctor</a><br>
+    <a href="https://wa.me/918826748389" target="_blank">💬 WhatsApp</a><br>
+    <a href="booking.html">📅 Book Appointment</a>
+    `;
+}
 </script>
+    
 
     
 </body>
