@@ -777,7 +777,29 @@ document.getElementById("navLinks").classList.toggle("active");
     }
 
     function getBotReply(query) {
-        // 1. Prioritize direct action keywords first
+        // --- 1. CONVERSATIONAL & SMALL TALK LAYER ---
+        const greetings = ["hi", "hello", "hey", "namaste", "good morning", "good evening"];
+        if (greetings.includes(query)) {
+            return "Hello there! 👋 I'm Ami, Dr. Batra's assistant. How can I help you and your little one today?";
+        }
+
+        if (query.includes("how are you")) {
+            return "I'm doing great, thank you for asking! 😊 I'm here to help you with clinic details or booking an appointment. What do you need help with?";
+        }
+
+        if (query.includes("thank you") || query === "thanks" || query.includes("thx")) {
+            return "You're very welcome! Let me know if you need anything else.";
+        }
+
+        if (query.includes("bye") || query.includes("goodbye")) {
+            return "Goodbye! Wishing you and your family great health. 🌟";
+        }
+
+        if (query.includes("who are you") || query.includes("your name")) {
+            return "I'm Ami! A virtual assistant built to help you quickly find information about Dr. Batra's pediatric clinic.";
+        }
+
+        // --- 2. DIRECT ACTION KEYWORDS ---
         if (query === "appointment" || query.includes("book")) {
             return faqData.appointment;
         }
@@ -788,12 +810,12 @@ document.getElementById("navLinks").classList.toggle("active");
             return faqData.location;
         }
 
-        // 2. Search the faqDatabase array
+        // --- 3. SEARCH THE EXTERNAL FAQ DATABASE ---
         let matchedFAQs = faqDatabase.filter(faq => 
             faq.q.toLowerCase().includes(query) || faq.a.toLowerCase().includes(query)
         );
 
-        // 3. NEW: If matches are found, format ALL of them
+        // --- 4. FORMAT MULTIPLE MATCHES ---
         if (matchedFAQs.length > 0) {
             
             // Optional: Add a friendly intro if there are multiple matches
@@ -807,8 +829,8 @@ document.getElementById("navLinks").classList.toggle("active");
             return introText + formattedMatches;
         }
 
-        // 4. Fallback if no match is found
-        return "Sorry, I didn’t understand. Please try asking about fees, timing, appointment, vaccination, or newborn care.";
+        // --- 5. FALLBACK ---
+        return "I'm still learning! 😅 Could you try asking about fees, timing, location, or how to book an appointment?";
     }
 </script>
 
