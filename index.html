@@ -777,20 +777,23 @@ document.getElementById("navLinks").classList.toggle("active");
     }
 
     function getBotReply(query) {
-        // First, we remove punctuation so "hello!" or "timming?" doesn't break the bot
+        // Clean up punctuation so it doesn't break our search
         let cleanQuery = query.toLowerCase().replace(/[.,!?]/g, '');
-        // We split the sentence into individual words to check them easier
         let words = cleanQuery.split(" ");
 
         // --- 1. CONVERSATIONAL & SMALL TALK LAYER ---
         const greetings = ["hi", "hello", "hey", "namaste"];
-        // Now it checks if ANY of the words in the sentence match a greeting
         if (greetings.some(greet => words.includes(greet))) {
             return "Hello there! 👋 I'm Ami, Dr. Batra's assistant. How can I help you and your little one today?";
         }
 
         if (cleanQuery.includes("how are you")) {
             return "I'm doing great, thank you for asking! 😊 I'm here to help you with clinic details or booking an appointment. What do you need help with?";
+        }
+
+        // ADDED: Handles questions about the doctor!
+        if (cleanQuery.includes("who is") || cleanQuery.includes("dr batra") || cleanQuery.includes("about doctor")) {
+            return "Dr. Sakshi Batra is a Pediatrician and Neonatologist with over 9 years of experience. She specializes in newborn care, vaccinations, and childhood illnesses. You can read more about her in the 'Meet Your Doctor' section above!";
         }
 
         if (cleanQuery.includes("thank you") || cleanQuery.includes("thanks") || cleanQuery.includes("thx")) {
@@ -815,19 +818,35 @@ document.getElementById("navLinks").classList.toggle("active");
         if (cleanQuery.includes("location") || cleanQuery.includes("address") || cleanQuery.includes("where")) {
             return faqData.location;
         }
-        // ADDED: The missing timing block (including typos like 'timming' and related words)
         if (cleanQuery.includes("time") || cleanQuery.includes("timing") || cleanQuery.includes("timming") || cleanQuery.includes("hours") || cleanQuery.includes("open")) {
             return faqData.timing;
         }
 
-        // --- 3. SEARCH THE EXTERNAL FAQ DATABASE ---
-        let matchedFAQs = faqDatabase.filter(faq => 
-            faq.q.toLowerCase().includes(cleanQuery) || faq.a.toLowerCase().includes(cleanQuery)
-        );
+        // --- 3. SMARTER FAQ SEARCH ---
+        // Words to ignore so we don't accidentally match every single FAQ
+        let ignoreWords = ["child", "baby", "infant", "newborn", "parent", "doctor", "pediatrician", "what", "when", "how", "why", "where", "should", "could", "would", "will", "does", "this", "that", "have", "with", "from", "into"];
 
+        // Extract important keywords (longer than 3 letters and not in the ignore list)
+        let searchKeywords = words.filter(w => w.length > 3 && !ignoreWords.includes(w));
+
+        // Catch common typos manually
+        if (cleanQuery.includes("frever")) searchKeywords.push("fever");
+        if (cleanQuery.includes("vacin")) searchKeywords.push("vaccin");
+
+        let matchedFAQs = faqDatabase.filter(faq => {
+            let textToSearch = (faq.q + " " + faq.a).toLowerCase();
+
+            // Match exact phrase first
+            if (textToSearch.includes(cleanQuery)) return true;
+
+            // Match individual important keywords (like "fever")
+            return searchKeywords.some(keyword => textToSearch.includes(keyword));
+        });
+
+        // --- 4. FORMAT MULTIPLE MATCHES ---
         if (matchedFAQs.length > 0) {
             let introText = matchedFAQs.length > 1 ? `<span style="color:#888; font-size:11px; display:block; margin-bottom:8px;">I found ${matchedFAQs.length} related answers:</span>` : '';
-            
+
             let formattedMatches = matchedFAQs.map(faq => 
                 `<b style="color:#00796B;">${faq.q}</b><br><span style="color:#555; display:inline-block; margin-top:4px;">${faq.a}</span>`
             ).join('<hr style="border:0; border-top:1px solid #eee; margin:12px 0;">');
@@ -835,7 +854,7 @@ document.getElementById("navLinks").classList.toggle("active");
             return introText + formattedMatches;
         }
 
-        // --- 4. FALLBACK ---
+        // --- 5. FALLBACK ---
         return "I'm still learning! 😅 Could you try asking about fees, timing, location, or how to book an appointment?";
     }
 </script>
