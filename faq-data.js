@@ -1,6 +1,7 @@
 // faq-data.js
 
 const faqDatabase = [
+    // --- EXISTING CORE FAQS ---
     {
         q: "When should my newborn have the first pediatric check-up?",
         a: "Newborns should ideally have their first pediatric check-up within the first few days after discharge from the hospital. Early visits help monitor feeding, weight gain, jaundice, and overall newborn health."
@@ -36,5 +37,41 @@ const faqDatabase = [
     {
         q: "What are the clinic timings?",
         a: "The clinic is open from Monday to Saturday between 5:00 PM and 8:00 PM. Appointments can be booked online, via phone call, or through WhatsApp."
+    },
+
+    // --- NEW LOGISTICAL FAQS ---
+    {
+        q: "Do you accept walk-in patients or is a prior appointment necessary?",
+        a: "While we do accept walk-in patients, we highly recommend booking an appointment in advance to avoid long waiting times for you and your baby."
+    },
+    {
+        q: "What payment methods do you accept at the clinic?",
+        a: "We accept Cash, UPI (Google Pay, PhonePe, Paytm), and major debit/credit cards at the clinic."
+    },
+    {
+        q: "Does Dr. Batra offer online or video consultations?",
+        a: "Yes, online consultations are available for follow-ups and minor queries. Please contact us on WhatsApp at +91 88267 48389 to schedule a teleconsultation."
+    },
+    {
+        q: "What should I do in case of a pediatric emergency?",
+        a: "In case of a severe medical emergency outside of clinic hours (5 PM - 8 PM), please rush your child to the nearest hospital emergency room immediately."
+    },
+
+    // --- NEW COMMON ILLNESS FAQS ---
+    {
+        q: "What should I do if my baby has a cold and cough?",
+        a: "For a mild cold and cough, ensure your baby is well-hydrated. Use saline nasal drops for a blocked nose. Avoid over-the-counter cough syrups for young children and consult Dr. Batra if symptoms persist for more than a few days or are accompanied by fever."
+    },
+    {
+        q: "How can I treat my baby's diaper rash?",
+        a: "Keep the diaper area clean and dry. Change diapers frequently, allow for some 'diaper-free' time, and apply a thick layer of zinc oxide-based diaper rash cream. If the rash is severe, bleeding, or doesn't improve, please visit the clinic."
+    },
+    {
+        q: "My baby is crying continuously (colic). What should I do?",
+        a: "Continuous crying in the evening might be colic. Try burping the baby after feeds, gently massaging their tummy, or using a warm compress. If the crying is unusual, associated with vomiting, or you are worried, it's best to get the baby checked."
+    },
+    {
+        q: "What to do for loose motions (diarrhea) or vomiting in kids?",
+        a: "The most important step is preventing dehydration. Offer ORS (Oral Rehydration Solution) frequently in small sips. Continue breastfeeding. If the child is lethargic, passing less urine, or if vomiting/diarrhea is severe, consult the doctor immediately."
     }
 ];
