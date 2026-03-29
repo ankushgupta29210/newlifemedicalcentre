@@ -813,6 +813,8 @@ function handleInput(e) {
 
         e.target.value = "";
 
+        currentFlow = null;
+
         // Show user msg
         chatMessages.innerHTML += `<div class="user-msg">${query}</div>`;
 
