@@ -564,9 +564,17 @@ Not for medico legal purpose
 </div>
 
 <script>
+// Toggles the menu open/closed when the hamburger icon is clicked
 function toggleMenu(){
-document.getElementById("navLinks").classList.toggle("active");
+    document.getElementById("navLinks").classList.toggle("active");
 }
+
+// NEW: Automatically closes the menu when any navigation link is clicked
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.getElementById("navLinks").classList.remove('active');
+    });
+});
 </script>
 
 <style>
